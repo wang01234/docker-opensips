@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE table PUBLIC "-//opensips.org//DTD DBSchema V1.1//EN" 
+  "https://opensips.org/pub/opensips/dbschema/dtd/1.1/dbschema.dtd" [
+
+<!ENTITY % entities SYSTEM "entities.xml">
+%entities;
+
+]>
+
+<table id="registrant" xmlns:db="http://docbook.org/ns/docbook">
+	<name>registrant</name>
+	<version>3</version>
+	<type db="mysql">&MYSQL_TABLE_TYPE;</type>
+	<description>
+		<db:para>Registrant information for the uac_registrant module. More 
+		information can be found at: &OPENSIPS_MOD_DOC;uac_registrant.html
+		</db:para>
+	</description>
+
+	<column id="id">
+		<name>id</name>
+		<type>unsigned int</type>
+		<size>&table_id_len;</size>
+		<autoincrement/>
+		<primary/>
+		<type db="dbtext">int,auto</type>
+		<description>unique ID</description>
+	</column>
+
+	<column id="registrar">
+		<name>registrar</name>
+		<type>string</type>
+		<size>&uri_len;</size>
+		<default/>
+		<description>URI pointing to the remote registrar.</description>
+	</column>
+
+	<column>
+		<name>proxy</name>
+		<type>string</type>
+		<size>&uri_len;</size>
+		<null/>
+		<default><null/></default>
+		<description>URI pointing to the outbond proxy.</description>
+	</column>
+
+	<column id="aor">
+		<name>aor</name>
+		<type>string</type>
+		<size>&uri_len;</size>
+		<default/>
+		<description>URI defining the address of record.</description>
+	</column>
+
+	<column>
+		<name>third_party_registrant</name>
+		<type>string</type>
+		<size>&uri_len;</size>
+		<null/>
+		<default><null/></default>
+		<description>URI defining the third party registrant.</description>
+	</column>
+
+	<column>
+		<name>username</name>
+		<type>string</type>
+		<size>&user_len;</size>
+		<null/>
+		<default><null/></default>
+		<description>Username for authentication.</description>
+	</column>
+
+	<column>
+		<name>password</name>
+		<type>string</type>
+		<size>&user_len;</size>
+		<null/>
+		<default><null/></default>
+		<description>Password for authentication. If the password
+		starts with <emphasis>0x</emphasis> and is an MD5 hash, then
+		it is considered to be the HA1 representation of the hash.
+		Otherwise, it is considered to be plain text.</description>
+	</column>
+
+	<column id="binding_URI">
+		<name>binding_URI</name>
+		<type>string</type>
+		<size>&uri_len;</size>
+		<default/>
+		<description>Contact URI in REGISTER.</description>
+	</column>
+
+	<column>
+		<name>binding_params</name>
+		<type>string</type>
+		<size>&user_len;</size>
+		<null/>
+		<default><null/></default>
+		<description>Contact params in REGISTER.</description>
+	</column>
+
+	<column>
+		<name>expiry</name>
+		<type>unsigned int</type>
+		<size>1</size>
+		<null/>
+		<default><null/></default>
+		<description>Expiration time.</description>
+	</column>
+
+	<column>
+		<name>forced_socket</name>
+		<type>string</type>
+		<size>&user_len;</size>
+		<null/>
+		<default><null/></default>
+		<description>socket for sending the REGISTER.</description>
+	</column>
+
+	<column>
+		<name>cluster_shtag</name>
+		<type>string</type>
+		<size>&user_len;</size>
+		<null/>
+		<default><null/></default>
+		<description>A cluster sharing tag (as [tag_name/custer_id]) used to control this registration in clustering scenarios</description>
+	</column>
+
+	<column>
+        <name>state</name>
+        <type>int</type>
+        <description>The state of the registrant (0 enabled, 1 disabled)</description>
+        <default>0</default>
+        <natural/>
+    </column>
+
+	<index>
+		<name>registrant_idx</name>
+		<colref linkend="aor"/>
+		<colref linkend="binding_URI"/>
+		<colref linkend="registrar"/>
+		<unique/>
+	</index>
+</table>
+
